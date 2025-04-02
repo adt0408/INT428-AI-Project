@@ -1,4 +1,8 @@
 # movieRecommendingChatbot
+pip install google-generativeai(install this python module before working on code)
+
+
+
 import google.generativeai as genai
 from datetime import datetime
 
