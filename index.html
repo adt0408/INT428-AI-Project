@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎬 MovieBot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: #0f0f0f;
+      color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 3rem;
+    }
+    h1 {
+      color: #e50914;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .card {
+      background: #1c1c1c;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 20px rgba(229,9,20,0.4);
+      width: 90%;
+      max-width: 600px;
+    }
+    label, select, button {
+      display: block;
+      width: 100%;
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+    select, button {
+      padding: 0.6rem;
+      background: #333;
+      color: #fff;
+      border: none;
+      border-radius: 0.5rem;
+    }
+    button {
+      background: #e50914;
+      cursor: pointer;
+    }
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      background: #222;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎬 MovieBot</h1>
+  <div class="card">
+    <label for="genre">Select Genre:</label>
+    <select id="genre">
+      <option value="action">Action</option>
+      <option value="comedy">Comedy</option>
+      <option value="horror">Horror</option>
+      <option value="romance">Romance</option>
+      <option value="sci-fi">Sci-Fi</option>
+      <option value="thriller">Thriller</option>
+      <option value="drama">Drama</option>
+      <option value="animation">Animation</option>
+    </select>
+
+    <label for="platform">Select Platform:</label>
+    <select id="platform">
+      <option value="netflix">Netflix</option>
+      <option value="amazon prime">Amazon Prime</option>
+      <option value="disney+">Disney+</option>
+      <option value="hbo max">HBO Max</option>
+      <option value="hulu">Hulu</option>
+      <option value="apple tv+">Apple TV+</option>
+    </select>
+
+    <button onclick="getRecommendation()">Get Recommendation</button>
+
+    <pre id="output"></pre>
+  </div>
+
+  <script>
+    async function getRecommendation() {
+      const genre = document.getElementById("genre").value;
+      const platform = document.getElementById("platform").value;
+      const output = document.getElementById("output");
+
+      output.textContent = "🎬 Fetching recommendation...";
+
+      const res = await fetch("http://localhost:5000/api/recommend", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ genre, platform }),
+      });
+
+      const data = await res.json();
+      if (data.recommendation) {
+        output.textContent = data.recommendation;
+      } else {
+        output.textContent = "❌ " + (data.error || "Something went wrong.");
+      }
+    }
+  </script>
+</body>
+</html>
